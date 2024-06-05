@@ -1,3 +1,4 @@
+'use client'
 import { LocationOn, LockClock } from '@mui/icons-material'
 import { Box, Card, CardActionArea, CardContent, CardMedia, Grid, Rating, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
@@ -32,8 +33,6 @@ const DestinationCards = ({ fetchTours }: Props) => {
     const id = tours._id
     router.push(`/toursandactivity/view/${id}`)
 }
-
-  // console.log(fetchTours, "from my tours");
   
 
   return (
