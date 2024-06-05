@@ -68,11 +68,18 @@ const MyToursList = () => {
       }
 
       useEffect(() => {
-        const user_id = localStorage.getItem('user_Id')
-        const user_role = localStorage.getItem('role')
+        if (typeof window !== 'undefined') {
+        const user_id = localStorage.getItem('user_Id');
+        const user_role = localStorage.getItem('role');
         setGetRole(user_role)
-        // dispatch(listTourAction({}));
-        dispatch(myToursAction({ tour_operator: user_id}));
+        if (user_id && user_role) {
+          dispatch(myToursAction({ tour_operator: user_id }));
+        }
+      }
+        // const user_id = localStorage.getItem('user_Id')
+        // const user_role = localStorage.getItem('role')
+        // // dispatch(listTourAction({}));
+        // dispatch(myToursAction({ tour_operator: user_id}));
     }, [dispatch, getRole, redirect])
 
     useEffect(() => {

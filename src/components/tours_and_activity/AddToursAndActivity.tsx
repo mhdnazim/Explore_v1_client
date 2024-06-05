@@ -16,9 +16,11 @@ import { useDispatch, useSelector } from "react-redux"
 import { AddTourAction } from "@/store/Tour_And_Activity"
 import toast from "react-hot-toast"
 import { yupResolver } from "@hookform/resolvers/yup";
-import QuillEditor from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import styles from "./styles.module.css";
+import dynamic from 'next/dynamic';
+// import QuillEditor from "react-quill";
+const QuillEditor = dynamic(() => import('react-quill'), { ssr: false });
 
 interface Props {
     open : boolean
@@ -86,7 +88,9 @@ const AddTourAndActivity = ({ open, handleClickClose}: Props) => {
             console.log(richText,"richText")
             const { title, destination, duration, availability, price, activity_type } = data
     
-            const tour_operator = localStorage.getItem('user_Id')
+            // const tour_operator = localStorage.getItem('user_Id')
+            const tour_operator = typeof window !== 'undefined' ? localStorage.getItem('user_Id') : null;
+
     
             const formData = new FormData()
             formData.append("tour_operator", tour_operator as string)
