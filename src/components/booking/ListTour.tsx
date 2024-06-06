@@ -148,6 +148,7 @@ const ListTourCard = ({ fetchBookings }: Props ) => {
                 handleClickComplete(items._id)
             }
     })}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[fetchBookings])
 
     const handleAddReview = ( item: BookingData ) => {

@@ -58,6 +58,7 @@ const EditItinerary = ({ open, handleClickClose, edit }: Props) => {
     
     useEffect(() => {
         initialValue(edit)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [edit])
     
 

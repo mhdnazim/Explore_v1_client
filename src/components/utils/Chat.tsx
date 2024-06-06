@@ -129,6 +129,7 @@ const Chats = ({ open, handleClickClose, user_id, data, role }: Props) => {
     if (data.tour_operator._id !== "") {
       dispatch(listChatsAction({ user: user_id, tour_operator: data.tour_operator._id, tour_and_activity: data._id }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, data, redirect]);
 
   useEffect(() => {
@@ -145,6 +146,7 @@ const Chats = ({ open, handleClickClose, user_id, data, role }: Props) => {
       console.log('Disconnected from server');
     });
     console.log(data, "chat data")
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allChats, data]);
 
   const div = useRef<HTMLDivElement>(null);
@@ -154,6 +156,7 @@ const Chats = ({ open, handleClickClose, user_id, data, role }: Props) => {
     if (open && div.current) {
       div.current.scrollIntoView({ behavior: "smooth", block: "end" });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allChats, open, div.current]);
 
   return (

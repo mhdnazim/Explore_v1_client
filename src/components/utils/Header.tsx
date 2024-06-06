@@ -17,6 +17,7 @@ import "../../app/globals.css"
 import io from 'socket.io-client';
 import { listChatsForOperator } from '@/store/chat';
 import axios from 'axios';
+import Image from 'next/image';
 
 interface TourData {
   _id: string,
@@ -170,6 +171,7 @@ const Header = () => {
     if ( getRole === "Tour Operator"){
       dispatch(listChatsForOperator({ tour_operator: getId }))
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getId])
 
   useEffect(() => {
@@ -185,6 +187,7 @@ const Header = () => {
     socket.on('disconnect', () => {
       console.log('Disconnected from server');
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ getId, chats ]);
 
 
@@ -197,13 +200,13 @@ const Header = () => {
   return (
     <>
         <Toolbar sx={{ borderBottom: 1, borderColor: 'divider', bgcolor: "white" }}>
-        {/* <Button size="small">Subscribe</Button> */}
-            <img
-            src="/favicon.png"
-            alt="Logo"
-            loading="lazy"
-            height={40}
-        /> &nbsp;
+        <Image
+              src="/favicon.png"
+              alt="Preview of the image"
+              width={50}
+              height={50} // Specify a default height
+              layout="fixed" // Use responsive layout
+          />
         <Typography
           component="h2"
           variant="h5"

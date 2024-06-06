@@ -13,6 +13,7 @@ import ImageIcon from '@mui/icons-material/Image';
 import WorkIcon from '@mui/icons-material/Work';
 import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 import { AccessAlarm, Contacts, Email, LocalPhone, LocationOn, Payment, Person, Tour } from "@mui/icons-material"
+import Image from "next/image"
 
 interface Props {
     bookingDetails : BookingData
@@ -79,12 +80,13 @@ const ViewBooking = ({ open, handleClickClose, bookingDetails }: Props) => {
                         <Chip label={bookingDetails.status} color={ bookingDetails.status === "cancelled" ? "error" : bookingDetails.status === "pending" ? "warning" : bookingDetails.status === "approved" ? "primary" : "success"} />
                     </Grid>
                     <Grid sx={{ textAlign: "center"}}>
-                        <img
-                        src={bookingDetails.tour_and_activity.highlight}
-                        alt="Highlight image..."
-                        loading="lazy"
-                        height={150}
-                        />
+                        <Image
+                            src={bookingDetails.tour_and_activity.highlight}
+                            alt="Description of the image"
+                            width={500}
+                            height={300}
+                            layout="responsive"
+                            />
                     </Grid>
                     <List sx={{ width: '100%', bgcolor: 'background.paper', }}>
                     <Grid container >

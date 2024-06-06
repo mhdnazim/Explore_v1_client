@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { Call, ContactSupport, HelpCenter, Home, Info, KeyboardArrowDown, LocationOn, Login, Logout, Map, Person, Security, Star, Work } from '@mui/icons-material';
 import { Avatar, Box, Grid, IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 function Copyright() {
     return (
@@ -54,8 +55,17 @@ const Footer = () => {
             component="footer"
             sx={{ width: "80%", }}>
                 <Grid xs={12} sx={{ py: 2 }}>
-                    <Link href="/home" style={{ color: "black", textDecoration: "none"}}>
-                        <img src="/favicon.png" alt="icon" width={100} style={{ backgroundColor: "black", borderRadius: "50%"}} />
+                    <Link href="/home" style={{ color: "black", textDecoration: "none", display: "flex", justifyContent:"center", flexDirection: "column", alignItems: "center" }}>
+                        <div style={{ width: '100px' }}>
+                            <Image
+                                src="/favicon.png"
+                                alt="Preview of the image"
+                                width={100}
+                                style={{ backgroundColor: "black", borderRadius: "50%"}}
+                                height={50} // Specify a default height
+                                layout="responsive" // Use responsive layout
+                            />
+                        </div>
                         <Typography variant='h4' sx={{ fontWeight: "bold", fontStyle: "italic"}}>Explorer</Typography>
                     </Link>
                 </Grid>

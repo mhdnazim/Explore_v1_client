@@ -19,6 +19,7 @@ import "react-quill/dist/quill.snow.css";
 import styles from "./styles.module.css";
 import { yupResolver } from "@hookform/resolvers/yup"
 import toast from "react-hot-toast"
+import Image from "next/image"
 
 interface Props {
     open : boolean
@@ -169,6 +170,7 @@ const EditTourAndActivity = ({ open, handleClickClose, viewedTour}: Props) => {
             setPreview(viewedTour.highlight)
             setRichText(viewedTour.description)
             setSelected(viewedTour.activity_type)
+            // eslint-disable-next-line react-hooks/exhaustive-deps
         }, [viewedTour])
 
     const handleClose = () => {
@@ -215,13 +217,16 @@ const EditTourAndActivity = ({ open, handleClickClose, viewedTour}: Props) => {
                         <DialogTitle> <TravelExplore/> Edit Tour/Activity</DialogTitle>
                     </Grid>
                     <DialogContent>
-                    <Grid sx={{ textAlign: "center"}}>
-                        <img
-                        src={preview}
-                        alt="Highlight will appear Here..."
-                        loading="lazy"
-                        height={150}
-                        />
+                    <Grid sx={{ textAlign: "center", display: "flex", justifyContent: "center" }}>
+                         <div style={{ width: '250px' }}>
+                            <Image
+                                src={preview}
+                                alt="Preview of the image"
+                                width={250}
+                                height={50} // Specify a default height
+                                layout="responsive" // Use responsive layout
+                            />
+                        </div>
                     </Grid>
                     <Grid
                         container

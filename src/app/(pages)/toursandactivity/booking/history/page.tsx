@@ -129,7 +129,7 @@ useEffect(() => {
   socket.on('disconnect', () => {
     console.log('Disconnected from server');
   });
-}, [ store ]);
+}, [ store, dispatch ]);
 
 
 useEffect(() => {

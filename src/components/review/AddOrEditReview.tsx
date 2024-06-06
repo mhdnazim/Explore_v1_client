@@ -128,7 +128,7 @@ const AddOrEditReview = ({ open, handleClickClose, bookingDetails}: Props) => {
         if ( open === true ){
             dispatch(viewReviewAction({ reviewer: bookingDetails.user._id, tour_and_activity: bookingDetails.tour_and_activity._id }));
         }
-    }, [dispatch, open])
+    }, [dispatch, open, bookingDetails])
     
     useEffect(() => {
         if ( preReview ){
@@ -136,6 +136,7 @@ const AddOrEditReview = ({ open, handleClickClose, bookingDetails}: Props) => {
                 initialValue(preReview)
             }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [preReview])
     
 

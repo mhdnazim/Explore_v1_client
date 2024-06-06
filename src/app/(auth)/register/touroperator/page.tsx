@@ -80,7 +80,6 @@ const TourOperatorRegister = () => {
         addTourOperator(data);
       } else {
       toast.error("Verification Failed")
-      // toast.error("Unable to fetch coordinates. Please check the address and try again.");
       }
     } else {
       toast.error("Password Doesn't Match");

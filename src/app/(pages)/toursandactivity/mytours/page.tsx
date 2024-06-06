@@ -2,6 +2,7 @@
 import MyTours from '@/components/home/MyTourCard'
 import DestinationCards from '@/components/home/TourCards'
 import AddTourAndActivity from '@/components/tours_and_activity/AddToursAndActivity'
+import useWindow from '@/hooks/useWindow'
 import { AppDispatch, RootState } from '@/store'
 import { listTourAction, myToursAction } from '@/store/Tour_And_Activity'
 import { AddCircleOutline, Visibility } from '@mui/icons-material'
@@ -90,6 +91,7 @@ const MyToursList = () => {
       console.log(fetchTours, "list");
     },[fetchTours])
 
+    useWindow(['role'])
 
 
   return (

@@ -19,6 +19,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import "react-quill/dist/quill.snow.css";
 import styles from "./styles.module.css";
 import dynamic from 'next/dynamic';
+import Image from "next/image"
 // import QuillEditor from "react-quill";
 const QuillEditor = dynamic(() => import('react-quill'), { ssr: false });
 
@@ -192,7 +193,15 @@ const AddTourAndActivity = ({ open, handleClickClose}: Props) => {
                     <Grid sx={{ textAlign: "center"}}>
                         {preview && (
                         <Grid item xs={12} sx={{ display: "flex", justifyContent: "center"}}>
-                            <img src={preview} alt="Preview" style={{width:"30%"}}/>
+                            <div style={{ width: '250px' }}>
+                                <Image
+                                    src={preview}
+                                    alt="Preview of the image"
+                                    width={250}
+                                    height={50} // Specify a default height
+                                    layout="responsive" // Use responsive layout
+                                />
+                                </div>
                         </Grid>
                         )}
                     </Grid>

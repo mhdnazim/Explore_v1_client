@@ -4,6 +4,7 @@ import MyTours from '@/components/home/MyTourCard'
 import OperatorCard from '@/components/home/OperatorCard'
 import ReviewCard from '@/components/home/ReviewCard'
 import DestinationCards from '@/components/home/TourCards'
+import useWindow from '@/hooks/useWindow'
 import { AppDispatch, RootState } from '@/store'
 import { listOperatorAction } from '@/store/TourOperator'
 import { listTourAction, myToursAction } from '@/store/Tour_And_Activity'
@@ -74,20 +75,24 @@ const Home = () => {
   // const reviews: ReviewData[] = useAppSelector(state => state.review.reviewData);
   const operators: TourOperator[] = useAppSelector(state => state.tourOperator.data);
 
+  const {user_id, role } = useWindow(["user_id", 'role'])
+  
   useEffect(() => {
-    const user_id = localStorage.getItem('user_Id')
-    const user_role = localStorage.getItem('role')
-    setGetRole(user_role)
+    // const user_id = localStorage.getItem('user_Id')
+    // const user_role = localStorage.getItem('role')
+    setGetRole(role)
     dispatch(listTourAction({ search: "", duration: "", fromPrice: "", toPrice: "", activity_type: "", tour_operator: "", longitude: "", latitude: "" }));
     dispatch(myToursAction({ tour_operator: user_id}));
     dispatch(listReviewAction({ tour_and_activity: "" }))
     dispatch(listOperatorAction({ search: "", latitude: "", longitude: "" }))
-}, [dispatch, getRole])
+}, [dispatch, getRole, role, user_id])
 
 useEffect(() => {
   setFetchTours([...store])
   setMyTours([...myAllTour])
 },[store, myAllTour])
+
+
 
 // useEffect(() => {
 //   console.log(operators, "list");

@@ -12,6 +12,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import toast from 'react-hot-toast';
 import { AddBookingAction } from '@/store/booking';
 import { loadStripe } from "@stripe/stripe-js";
+import Image from 'next/image';
 
 const asyncStripe = loadStripe("pk_test_51PLfemC65sgmj7MooXQ04DFKriQO2SlgDsey1FdFOimcW2KriXIuy3YkTm1r2CxsggiK7hXKdOzxHQ5lghhOUKkl009L7KXt9J");
 
@@ -187,6 +188,7 @@ const BookTour = ({ book, handleDialogClose, id, state, viewedTour }: Props) => 
 
    useEffect(() => {
     initialValue(role)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [role])
 
     const handleBooking = (panel: string) => {
@@ -474,12 +476,14 @@ const BookTour = ({ book, handleDialogClose, id, state, viewedTour }: Props) => 
                 <Link  sx={{ display: "flex", justifyContent: "center",  color: "black", pb: 2 }} component="legend" >
                     Lowest Price Guarantee
                 </Link>
-                      <img
-                      src={viewedTour.highlight}
-                      alt="Highlight will appear Here..."
-                      loading="lazy"
-                      style={{ width: "100%", height: "auto", borderRadius: "10px" }}
-                  />
+                  <Image
+                        src={viewedTour.highlight}
+                        alt="Preview of the image"
+                        width={250}
+                        height={50} // Specify a default height
+                        layout="responsive" // Use responsive layout
+                        style={{ width: "100%", height: "auto", borderRadius: "10px" }}
+                    />
                   <Typography variant='h5' sx={{ display: "flex", justifyContent: "center", fontWeight: "bold", pt: 2 }} component="legend" >
                   {viewedTour.destination.charAt(0).toUpperCase() + viewedTour.destination.substring(1)}
                 </Typography>

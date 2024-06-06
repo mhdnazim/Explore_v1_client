@@ -16,6 +16,7 @@ import toast from 'react-hot-toast';
 import { StickyShareButtons } from "sharethis-reactjs";
 import Chats from '@/components/utils/Chat';
 import AddItinerary from '@/components/tours_and_activity/AddItinerary';
+import Image from 'next/image';
 
 
 interface TourData {
@@ -210,7 +211,7 @@ const ViewTourOrActivity = ({params}: {params: { id: string }}) => {
 
     useEffect(() => {
         dispatch(listReviewAction({ tour_and_activity: params.id }))
-      }, [dispatch, redirect ])
+      }, [dispatch, redirect, params.id ])
 
     useEffect(() => {
         if (reviews.length > 0) {
@@ -293,12 +294,15 @@ const ViewTourOrActivity = ({params}: {params: { id: string }}) => {
            <>
                <Chats open={chat} handleClickClose={ handleClickClose } user_id={loginId} data={viewedTour} role={role} />
            <Grid className='chat_icon' onClick={handleChat} >
-                <img
-                    src="/chat.gif"
-                    alt="Highlight will appear Here..."
-                    loading="lazy"
-                    height={50}
-                    />
+                    <div style={{ height: '50px' }}>
+                        <Image
+                            src="/chat.gif"
+                            alt="Preview of the image"
+                            width={50}
+                            height={50} // Specify a default height
+                            layout="fixed" // Use responsive layout
+                        />
+                        </div>
             </Grid>
            </>
             }
@@ -339,13 +343,14 @@ const ViewTourOrActivity = ({params}: {params: { id: string }}) => {
             </Grid>
             <Grid item xs={12} md={8} >
                 <Paper elevation={3} sx={{ borderRadius: "10px"}} >
-
-            <img
-                src={viewedTour.highlight}
-                alt="Highlight will appear Here..."
-                loading="lazy"
-                style={{ width: "100%", height: "auto", borderRadius: "10px" }}
-            />
+                    <Image
+                        src={viewedTour.highlight}
+                        alt="Preview of the image"
+                        width={250}
+                        height={50} // Specify a default height
+                        layout="responsive" // Use responsive layout
+                        style={{ width: "100%", height: "auto", borderRadius: "10px" }}
+                    />
                 </Paper>
             </Grid>
             <Grid sx={{ position: "sticky" }} item xs={12} md={4} >
