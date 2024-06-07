@@ -21,7 +21,7 @@ interface Props {
 }
 
 const schema = yup.object().shape({
-    rating: yup.number().required('Rating is required!!'),
+    rating: yup.number().required('Rating is required!!').typeError('Rating is required!!'),
     review_title: yup.string().required('Review Title is required!!'),
     review: yup.string().required('Review is required!!')
 })

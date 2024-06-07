@@ -20,6 +20,7 @@ import styles from "./styles.module.css";
 import { yupResolver } from "@hookform/resolvers/yup"
 import toast from "react-hot-toast"
 import Image from "next/image"
+import useWindow from "@/hooks/useWindow"
 
 interface Props {
     open : boolean
@@ -106,16 +107,14 @@ const EditTourAndActivity = ({ open, handleClickClose, viewedTour}: Props) => {
     const useAppSelector = useSelector.withTypes<RootState>()
 
     const dispatch = useAppDispatch();
+    
+    const { user_Id: tour_operator } = useWindow(["user_Id"])
 
     const onFormSubmit = async (data:ViewedData) => {
     
           if (coordinates.latitude && coordinates.longitude) {
             data = { ...data };
-            console.log(data,"Data")
-            console.log(richText,"richText")
             const { title, destination, duration, availability, price, activity_type } = data
-    
-            const tour_operator = localStorage.getItem('user_Id')
     
             const formData = new FormData()
             formData.append("_id", viewedTour._id)

@@ -129,34 +129,37 @@ const Login = () => {
                 />
                 <Controller
                     control={control}
-                    name="email"
+                    name="password"
                     rules={{ required: true }}
                     render={({ field: { ref, ...field } }) => (
-                      <FormControl sx={{ my: 1, width: '100%' }} variant="outlined">
-                      <InputLabel shrink={true} htmlFor="password">Password</InputLabel>
-                      <OutlinedInput
-                        id="password"
+                    <TextField 
                         {...register('password')}
-                        type={ showPassword ? 'text' : 'password' }
-                        endAdornment={
-                          <InputAdornment position="end">
-                            <IconButton
-                              aria-label="toggle password visibility"
-                              onClick={handleClickShowPassword}
-                              onMouseDown={handleMouseDownPassword}
-                              edge="end"
-                            >
-                              { showPassword ? <VisibilityOff /> : <Visibility /> }
-                            </IconButton>
-                          </InputAdornment>
-                        }
-                        label="Password"
+                        sx={{ my: 2 }}
+                        name="password"
+                        fullWidth
+                        id="password"
+                        type={showPassword ? 'text' : 'password'}
+                        InputLabelProps={{ shrink: true }}
+                        InputProps={{ // Use InputProps to pass endAdornment
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={handleClickShowPassword}
+                                onMouseDown={handleMouseDownPassword}
+                                edge="end"
+                              >
+                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                              </IconButton>
+                            </InputAdornment>
+                          )
+                        }}
+                        label="password"
                         error={Boolean(errors.password)}
-                        />
-                    </FormControl>
+                        {...(errors.password && {helperText:errors.password.message})}
+                    />
                     )}
                 />
-                <p style={{ textAlign: "start", color: "#db2f2f", fontSize: "12px", fontWeight: "400px", marginLeft: "10px" }}>{errors.password?.message}</p>
 
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}

@@ -45,9 +45,9 @@ interface Itinerary {
 const schema = yup.object().shape({
     title: yup.string().required('Tour title is required!!'),
     destination: yup.string().required('Destination is required!!'),
-    duration: yup.number().required('Duration must be provided'),
-    price: yup.number().required('Price is required'),
-    availability: yup.number().required('Availability must be provided'),
+    duration: yup.number().required('Duration must be provided').typeError('Duration must be provided'),
+    price: yup.number().required('Price is required').typeError('Price is required'),
+    availability: yup.number().required('Availability must be provided').typeError('Availability must be provided'),
     activity_type: yup.string().required('Activity must be provided!!'),
     highlight: yup.string().required('Highlight is required!!')
   })
@@ -352,6 +352,8 @@ const AddTourAndActivity = ({ open, handleClickClose}: Props) => {
                                     id="activity_type"
                                     label="Activity Type"
                                     {...register("activity_type")}
+                                    error={Boolean(errors.activity_type)}
+                                    {...(errors.activity_type && {helperText:errors.activity_type.message})}
                                 >
                                     <MenuItem value="Hiking">Hiking</MenuItem>
                                     <MenuItem value="Trekking">Trekking</MenuItem>

@@ -75,17 +75,17 @@ const Home = () => {
   // const reviews: ReviewData[] = useAppSelector(state => state.review.reviewData);
   const operators: TourOperator[] = useAppSelector(state => state.tourOperator.data);
 
-  const {user_id, role } = useWindow(["user_id", 'role'])
+  const {user_Id, role } = useWindow(["user_Id", 'role'])
   
   useEffect(() => {
     // const user_id = localStorage.getItem('user_Id')
     // const user_role = localStorage.getItem('role')
     setGetRole(role)
     dispatch(listTourAction({ search: "", duration: "", fromPrice: "", toPrice: "", activity_type: "", tour_operator: "", longitude: "", latitude: "" }));
-    dispatch(myToursAction({ tour_operator: user_id}));
+    dispatch(myToursAction({ tour_operator: user_Id}));
     dispatch(listReviewAction({ tour_and_activity: "" }))
     dispatch(listOperatorAction({ search: "", latitude: "", longitude: "" }))
-}, [dispatch, getRole, role, user_id])
+}, [dispatch, getRole, role, user_Id])
 
 useEffect(() => {
   setFetchTours([...store])
@@ -95,8 +95,8 @@ useEffect(() => {
 
 
 // useEffect(() => {
-//   console.log(operators, "list");
-// },[operators])
+//   console.log(user_Id, role, "Home");
+// },[user_Id, role])
 
   return (
     <>

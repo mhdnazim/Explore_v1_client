@@ -1,12 +1,23 @@
-// /** @type {import('next').NextConfig} */
-// const nextConfig = {};
-
-// export default nextConfig;
-// next.config.mjs
-
 const nextConfig = {
     images: {
-      domains: ['upload.wikimedia.org', 'localhost'], // Add other domains as needed
+      // domains: ['upload.wikimedia.org', 'localhost', 'explore-server.onrender.com'], // Add other domains as needed
+      remotePatterns: [
+        {
+          protocol: 'https',
+          hostname: 'upload.wikimedia.org',
+          pathname: '**',
+        },
+        {
+          protocol: 'http',
+          hostname: 'localhost',
+          pathname: '**',
+        },
+        {
+          protocol: 'https',
+          hostname: 'explore-server.onrender.com',
+          pathname: '**',
+        },
+      ],
     },
   };
   

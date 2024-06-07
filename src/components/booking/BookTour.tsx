@@ -13,6 +13,7 @@ import toast from 'react-hot-toast';
 import { AddBookingAction } from '@/store/booking';
 import { loadStripe } from "@stripe/stripe-js";
 import Image from 'next/image';
+import useWindow from '@/hooks/useWindow';
 
 const asyncStripe = loadStripe("pk_test_51PLfemC65sgmj7MooXQ04DFKriQO2SlgDsey1FdFOimcW2KriXIuy3YkTm1r2CxsggiK7hXKdOzxHQ5lghhOUKkl009L7KXt9J");
 
@@ -123,7 +124,7 @@ const Transition = React.forwardRef(function Transition(
 
 const BookTour = ({ book, handleDialogClose, id, state, viewedTour }: Props) => {
     const [isShow, setIsShow] = useState(false)
-    const [role, setRole] = useState<UserData>(defaultUserData)
+    const [ userRole, setUserRole] = useState<UserData>(defaultUserData)
     const [open, setOpen] = useState<boolean>(false)
     const amount = 1
 
@@ -148,7 +149,7 @@ const BookTour = ({ book, handleDialogClose, id, state, viewedTour }: Props) => 
           toast.error("Please Complete Every Details...")
         } else {
           dispatch(AddBookingAction({
-            user: role._id,
+            user: userRole._id,
             tour_operator: viewedTour.tour_operator._id,
             tour_and_activity: viewedTour._id,  
             phone_number, 
@@ -177,19 +178,19 @@ const BookTour = ({ book, handleDialogClose, id, state, viewedTour }: Props) => 
             }
             }, [sessionId, dispatch ])
 
-          const initialValue = (role: UserData) => {
+          const initialValue = (userRole: UserData) => {
         reset({
-            first_name: role.first_name.charAt(0).toUpperCase() + role.first_name.substring(1,24),
-            last_name: role.last_name.charAt(0).toUpperCase() + role.last_name.substring(1,24),
-            email: role.email,
-            phone_number: role.phone_number
+            first_name: userRole.first_name.charAt(0).toUpperCase() + userRole.first_name.substring(1,24),
+            last_name: userRole.last_name.charAt(0).toUpperCase() + userRole.last_name.substring(1,24),
+            email: userRole.email,
+            phone_number: userRole.phone_number
            })
    }
 
    useEffect(() => {
-    initialValue(role)
+    initialValue(userRole)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [role])
+    }, [userRole])
 
     const handleBooking = (panel: string) => {
         handleAccordChange(panel)
@@ -200,20 +201,21 @@ const BookTour = ({ book, handleDialogClose, id, state, viewedTour }: Props) => 
         setIsShow(true)
     }
 
+    const {user_Id, role, access_token: storedToken } = useWindow(["user_Id", 'role', 'access_token'])
+
+    
     useEffect(() => {
-    if (id) {
-        const storedToken = localStorage.getItem("access_token")
-        const user_Id = localStorage.getItem("user_Id")
+      if ( id && user_Id ) {
         const findUserDetails = async () => {
         await axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/user/find`,  { _id: user_Id }  , {
         headers: {Authorization: `Bearer ${storedToken}` } }).then(res=>{
-            console.log(res.data.data, "response")
-            setRole(res.data.data)
+          console.log(res.data.data, "res")
+            setUserRole(res.data.data)
             })
     }
     findUserDetails()
     }   
-    }, [id, open])
+    }, [id, open, storedToken, user_Id])
 
   const [expanded, setExpanded] = React.useState<string | false>('panel1');
 
@@ -230,11 +232,12 @@ const BookTour = ({ book, handleDialogClose, id, state, viewedTour }: Props) => 
 
     const handleChange = (evt: any) => {
         const value = evt.target.value;
-        // setState({
-        //     ...state,
-        //     [evt.target.name]: value
-        // });
-        };
+    };
+
+    useEffect(() => {
+      console.log(userRole, "user==============")
+    }, [userRole])
+    
 
 
   return (

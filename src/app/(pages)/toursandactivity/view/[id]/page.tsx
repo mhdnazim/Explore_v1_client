@@ -11,12 +11,16 @@ import EditTourAndActivity from '@/components/tours_and_activity/EditToursAndAct
 import { useRouter } from 'next/navigation';
 import BookTour from '@/components/booking/BookTour';
 import ReviewCard from '@/components/home/ReviewCard';
+import * as yup from 'yup'
 import { listReviewAction } from '@/store/review';
 import toast from 'react-hot-toast';
 import { StickyShareButtons } from "sharethis-reactjs";
 import Chats from '@/components/utils/Chat';
 import AddItinerary from '@/components/tours_and_activity/AddItinerary';
 import Image from 'next/image';
+import useWindow from '@/hooks/useWindow';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Controller, useForm } from 'react-hook-form';
 
 
 interface TourData {
@@ -106,10 +110,15 @@ interface TourData {
     createdAt: string
   }
 
+  const schema = yup.object().shape({
+    date: yup.string().required('Date is required!!'),
+    persons: yup.number().required('Number of persons is required!!').typeError('Number of persons is required!!')
+})
+
 const ViewTourOrActivity = ({params}: {params: { id: string }}) => {
     const [viewedTour, setViewedTour] = useState<TourData>(defaultTourData)
     const [isShow, setIsShow] = useState(false)
-    const [role, setRole] = useState<string | null>("")
+    // const [role, setRole] = useState<string | null>("")
     const [loginId, setLoginId] = useState<string | null>("")
     const [chat, setChat] = useState<boolean>(false)
     const [open, setOpen] = useState<boolean>(false)
@@ -157,6 +166,16 @@ const ViewTourOrActivity = ({params}: {params: { id: string }}) => {
         setAdd(false)
     }
 
+    const {
+        register,
+        handleSubmit,
+        control,
+        formState: { errors },
+        reset
+    } = useForm({
+    resolver: yupResolver(schema)
+    });
+
     const handleClickDelete = () => {
         if (params.id){
             dispatch(deleteTourAction({_id: params.id}));
@@ -168,9 +187,10 @@ const ViewTourOrActivity = ({params}: {params: { id: string }}) => {
         dispatch(DeleteItineraryAction( viewedTour._id ))
     }
 
-    const handleClickCheck = (event: any) => {
+    const {user_Id: _id, role, access_token: storedToken } = useWindow(["user_Id", 'role', 'access_token'])
+
+    const onFormSubmit = async (data:any, event: any) => {
         event.preventDefault()
-        const storedToken = localStorage.getItem('access_token')
         if ( ! storedToken ){
             toast.error("Please login to continue...")
         } else {
@@ -185,12 +205,8 @@ const ViewTourOrActivity = ({params}: {params: { id: string }}) => {
     }
 
     useEffect(() => {
-        const user_role = localStorage.getItem("role")
-        setRole(user_role)
-        const _id = localStorage.getItem("user_Id")
         setLoginId(_id)
     if ( params.id !== "" ) {
-        const storedToken = localStorage.getItem("access_token")
         const viewTour = async () => {
         await axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/toursandactivities/view`,  { _id: params.id }  , {
         headers: {Authorization: `Bearer ${storedToken}` } }).then(res=>{
@@ -199,7 +215,8 @@ const ViewTourOrActivity = ({params}: {params: { id: string }}) => {
     }
     viewTour()
     }   
-    }, [params.id, open, redirect, avgReview])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [params.id,_id, open, redirect, avgReview])
 
     const handleChange = (evt: any) => {
         const value = evt.target.value;
@@ -222,8 +239,10 @@ const ViewTourOrActivity = ({params}: {params: { id: string }}) => {
             setAvgReview(0);
         }
     }, [reviews]); // Add productId to dependencies
-     
-      
+
+    useEffect(() => {
+        console.log(loginId, 'loginId')
+    }, [loginId])
 
   return (
     <>
@@ -356,7 +375,7 @@ const ViewTourOrActivity = ({params}: {params: { id: string }}) => {
             <Grid sx={{ position: "sticky" }} item xs={12} md={4} >
             <Paper  elevation={3} sx={{ borderRadius: "10px", p: 3 }} >
             
-            <form onSubmit={ handleClickCheck }>
+            <form onSubmit={handleSubmit( onFormSubmit )}>
                 <Typography variant='h5' sx={{ display: "flex", justifyContent: "center", fontWeight: "bold" }} component="legend" >
                 From  ₹  {viewedTour.price}.00 /-
                 </Typography>
@@ -364,7 +383,7 @@ const ViewTourOrActivity = ({params}: {params: { id: string }}) => {
                     Lowest Price Guarantee
                 </Link>
                 <Grid item xs={12} sx={{ px: 3, mt: 3 }} >
-                    <TextField
+                    {/* <TextField
                         autoFocus
                         required
                         margin="dense"
@@ -375,13 +394,33 @@ const ViewTourOrActivity = ({params}: {params: { id: string }}) => {
                         fullWidth
                         variant="outlined"
                         onChange={handleChange}
+                    /> */}
+                     <Controller
+                        control={control}
+                        name="date"
+                        rules={{ required: true }}
+                        render={({ field: { ref, ...field } }) => (
+                            <TextField
+                                autoFocus
+                                margin="dense"
+                                id="date"
+                                {...register('date')}
+                                name="date"
+                                type="date"
+                                InputProps={{ inputProps: { min: new Date().toJSON().slice(0, 10), max: null } }}
+                                fullWidth
+                                variant="outlined"
+                                error={Boolean(errors.date)}
+                                {...(errors.date && {helperText:errors.date.message})}
+                            />
+                        )}
                     />
                 </Grid>
                 
                 <Grid item xs={12} sx={{ px: 3 }} >
-                    <TextField
+                    {/* <TextField
                         autoFocus
-                        required
+                        // required
                         margin="dense"
                         id="persons"
                         name="persons"
@@ -391,6 +430,26 @@ const ViewTourOrActivity = ({params}: {params: { id: string }}) => {
                         fullWidth
                         variant="outlined"
                         onChange={handleChange}
+                    /> */}
+                    <Controller
+                        control={control}
+                        name="persons"
+                        rules={{ required: true }}
+                        render={({ field: { ref, ...field } }) => (
+                            <TextField
+                                autoFocus
+                                margin="dense"
+                                id="persons"
+                                {...register('persons')}
+                                name="persons"
+                                type="number"
+                                InputProps={{ inputProps: { min: 1 } }}
+                                fullWidth
+                                variant="outlined"
+                                error={Boolean(errors.persons)}
+                                {...(errors.persons && {helperText:errors.persons.message})}
+                            />
+                        )}
                     />
                 </Grid>
 

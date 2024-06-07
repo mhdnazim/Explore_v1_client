@@ -108,10 +108,12 @@ const Chats = ({ open, handleClickClose, user_id, data, role }: Props) => {
   const allChats: ChatsData[] = useAppSelector((state) => state.chat.chats);
   const redirect: boolean = useAppSelector((state) => state.chat.redirect);
 
-  const handleClickChat = () => {
-    dispatch(AddChatAction({ user: user_id, tour_operator: data.tour_operator._id, tour_and_activity: data._id, message }));
-    socket.emit('sendMessage', { name: user_id, message });
-    setMessage("");
+  const handleSendMessage = (event: any) => {
+    if (event.type === 'click' || (event.type === 'keydown' && event.keyCode === 13)) {
+      dispatch(AddChatAction({ user: user_id, tour_operator: data.tour_operator._id, tour_and_activity: data._id, message }));
+      socket.emit('sendMessage', { name: user_id, message });
+      setMessage("");
+    }
   };
 
   useEffect(() => {
@@ -241,6 +243,7 @@ const Chats = ({ open, handleClickClose, user_id, data, role }: Props) => {
             id="outlined-required"
             name="search"
             value={message}
+            onKeyDown={handleSendMessage}
             sx={{ width: "100%" }}
             InputProps={{
               startAdornment: <InputAdornment position="start">
@@ -251,7 +254,7 @@ const Chats = ({ open, handleClickClose, user_id, data, role }: Props) => {
                   <IconButton
                     sx={{ color: "#2379e3" }}
                     aria-label="toggle password visibility"
-                    onClick={handleClickChat}
+                    onClick={handleSendMessage}
                     edge="end"
                   >
                     <Send />

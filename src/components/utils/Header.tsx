@@ -205,7 +205,7 @@ const Header = () => {
               alt="Preview of the image"
               width={50}
               height={50} // Specify a default height
-              layout="fixed" // Use responsive layout
+              // layout="fixed" // Use responsive layout
           />
         <Typography
           component="h2"
