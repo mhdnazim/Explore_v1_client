@@ -1,4 +1,4 @@
-import { Accordion, AccordionDetails, AccordionSummary, Alert, AppBar, Button, Chip, Dialog, Divider, FormControlLabel, FormLabel, Grid, IconButton, InputAdornment, Link, List, ListItemButton, ListItemText, Paper, Radio, RadioGroup, SelectChangeEvent, Slide, TextField, Toolbar, Typography } from '@mui/material'
+import { Accordion, AccordionDetails, AccordionSummary, Alert, AppBar, Button, Chip, Dialog, FormControlLabel, FormLabel, Grid, IconButton, InputAdornment, Link, Paper, Radio, RadioGroup, SelectChangeEvent, Slide, TextField, Toolbar, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import CloseIcon from '@mui/icons-material/Close';
 import { TransitionProps } from '@mui/material/transitions';
@@ -7,10 +7,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import axios from 'axios';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import toast from 'react-hot-toast';
-import { AddBookingAction, EditBookingAction } from '@/store/booking';
+import { EditBookingAction } from '@/store/booking';
 import { loadStripe } from "@stripe/stripe-js";
 import Image from 'next/image';
 

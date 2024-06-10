@@ -18,6 +18,8 @@ import io from 'socket.io-client';
 import { listChatsForOperator } from '@/store/chat';
 import axios from 'axios';
 import Image from 'next/image';
+import { useAuth } from '@/hooks/useAuth';
+import useWindow from '@/hooks/useWindow';
 
 interface TourData {
   _id: string,
@@ -86,14 +88,20 @@ const socket = io(`${process.env.NEXT_PUBLIC_SERVER_URL}`);
 const Header = () => {
   const [anchorElChat, setAnchorElChat] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const [isLogged, setIsLogged] = useState<null | string>(null);
-  const [getRole, setGetRole] = useState<string | null>("")
-  const [getId, setGetId] = useState<string | null>("")
+  // const [isLogged, setIsLogged] = useState<null | string>(null);
+  // const [getRole, setGetRole] = useState<string | null>("")
+  // const [getId, setGetId] = useState<string | null>("")
   const [chatCount, setChatCount] = useState(5);
   const [chat, setChat] = useState<boolean>(false)
   const [ chatUser, setChatUser ] = useState("")
   const [ messagedTour, setMessagedTour ] = useState<TourData>(defaultTourData)
   const router = useRouter()
+  
+  const {user_Id: _id, role: user_role, access_token: storedToken } = useWindow(["user_Id", 'role', 'access_token'])
+
+  console.log(_id, user_role, storedToken, "All item from hook" )
+  
+  const { logout } = useAuth()
 
   const useAppDispatch: any = useDispatch.withTypes<AppDispatch>()
   const useAppSelector = useSelector.withTypes<RootState>()
@@ -103,10 +111,11 @@ const Header = () => {
   const chats: any = useAppSelector(state => state.chat.userData);
 
   const handleLogin = () => {
-    window.localStorage.removeItem('access_token')
-    window.localStorage.removeItem('user_Id')
-    window.localStorage.removeItem('role')
-    router.push('/login')
+    logout()
+    // window.localStorage.removeItem('access_token')
+    // window.localStorage.removeItem('user_Id')
+    // window.localStorage.removeItem('role')
+    // router.push('/login')
   }
 
   const handleBookings = () => {
@@ -157,27 +166,26 @@ const Header = () => {
   setChat(true)
   };
 
-  useEffect(() => {
-    const user_role = localStorage.getItem('role')
-    setGetRole(user_role)
-    const storedToken = localStorage.getItem('access_token')
-    setIsLogged(storedToken)
-    const _id = localStorage.getItem('user_Id')
-    setGetId(_id)
-    // dispatch(listUsersByTourOperator(tour_operator_id))
-  }, [isLogged, getRole])
+  // useEffect(() => {
+  //   const user_role = localStorage.getItem('role')
+  //   setGetRole(user_role)
+  //   // const storedToken = localStorage.getItem('access_token')
+  //   setIsLogged(storedToken)
+  //   // const _id = localStorage.getItem('user_Id')
+  //   setGetId(_id)
+  //   dispatch(listUsersByTourOperator(tour_operator_id))
+  // }, [_id, storedToken, user_role])
 
   useEffect(() => {
-    if ( getRole === "Tour Operator"){
-      dispatch(listChatsForOperator({ tour_operator: getId }))
+    if ( user_role === "Tour Operator"){
+      dispatch(listChatsForOperator({ tour_operator: _id }))
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getId])
+  }, [ _id, dispatch, user_role ])
 
   useEffect(() => {
     socket.on('sendMessage', (message) => {
-      if ( getRole === "Tour Operator" ) {
-        dispatch(listChatsForOperator({ tour_operator: getId }))
+      if ( user_role === "Tour Operator" ) {
+        dispatch(listChatsForOperator({ tour_operator: _id }))
       }
     });
     socket.on('connection', () => {
@@ -188,14 +196,7 @@ const Header = () => {
       console.log('Disconnected from server');
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ getId, chats ]);
-
-
-  useEffect(() => {
-    console.log(chats.slice(-5).reverse(), "user chat Id")
-  }, [chats])
-  
-
+  }, [ _id, chats ]);
 
   return (
     <>
@@ -217,10 +218,7 @@ const Header = () => {
           <Link href={'/home'} style={{ textDecoration: "none", color: "black" }}>Explorer</Link>
         </Typography>
         <Box sx={{ flexGrow: 0 }}>
-                  {/* { getRole === "Tour Operator" && 
-                 
-                  } */}
-            { getRole === "Tour Operator" && 
+            { user_role === "Tour Operator" && 
              <>
                 <Tooltip title="Open settings" >
                     <IconButton onClick={handleOpenUserChat} sx={{ p: 1 }}>
@@ -245,7 +243,7 @@ const Header = () => {
                   open={Boolean(anchorElChat)}
                   onClose={handleCloseUserChat}
                 >
-                  <Chats open={chat} handleClickClose={ handleClickClose } user_id={chatUser} data={messagedTour} role={getRole} />
+                  <Chats open={chat} handleClickClose={ handleClickClose } user_id={chatUser} data={messagedTour} role={user_role} />
                   { chats.slice(-chatCount).reverse().map((item: any) => {
                     return(
                       <MenuItem key={ item._id }  onClick={ () => handleCloseUserChat(item.user._id, item.tour_and_activity)}>
@@ -256,10 +254,6 @@ const Header = () => {
                       </MenuItem>
                     )
                   })}
-
-                  {/* <MenuItem sx={{ display: "flex", justifyContent: "center" }}>
-                      <Button variant='outlined' size='small' color='success' className='add' startIcon={ <ExpandMore /> }>View more</Button>
-                  </MenuItem> */}
 
                   { chats.length > chatCount && 
                     <MenuItem sx={{ display: "flex", justifyContent: "center" }}>
@@ -274,7 +268,7 @@ const Header = () => {
             <Tooltip title="Open settings" >
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 1 }}>
                 <Avatar sx={{ bgcolor: green[500] }}>
-                  { getRole === "Tour Operator" ? 
+                  { user_role === "Tour Operator" ? 
                   <Store />
                   :
                   <Person />
@@ -300,11 +294,11 @@ const Header = () => {
               onClose={handleCloseUserMenu}
             >
                 <MenuItem  onClick={handleCloseUserMenu}>
-                  { isLogged && <Typography onClick={() => {handleBookings()}} textAlign="center">{ getRole === "Tour Operator" ? "All Bookings" : "My Bookings"}</Typography>
+                  { storedToken && <Typography onClick={() => {handleBookings()}} textAlign="center">{ user_role === "Tour Operator" ? "All Bookings" : "My Bookings"}</Typography>
                   }
                 </MenuItem>
                 <MenuItem  onClick={handleCloseUserMenu}>
-                  { isLogged ? <Typography onClick={() => {handleLogin()}} textAlign="center">Log Out</Typography>
+                  { storedToken ? <Typography onClick={() => {handleLogin()}} textAlign="center">Log Out</Typography>
                   : <Typography onClick={() => {handleLog()}} textAlign="center">Log In</Typography>}
                 </MenuItem>
 

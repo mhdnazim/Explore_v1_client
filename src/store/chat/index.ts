@@ -133,21 +133,6 @@ export const chatSlice = createSlice({
         state.loading = false
         state.error = payload
     })
-    // .addCase(listUsersByTourOperator.fulfilled, (state, action:PayloadAction<any>) => {
-    //     state.loading = false
-    //     state.error = ""
-    //     state.userData = action.payload.data
-    //     state.redirect = false
-    // })
-    // .addCase(listUsersByTourOperator.pending, (state) => {
-    //     state.loading = true
-    //     state.redirect = false
-    // })
-    // .addCase(listUsersByTourOperator.rejected, (state, payload:PayloadAction<any>) => {
-    //     state.loading = false
-    //     state.error = payload
-    //     state.redirect = false
-    // })
     .addCase(listChatsForOperator.fulfilled, (state, action:PayloadAction<any>) => {
         state.loading = false
         state.error = ""

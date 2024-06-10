@@ -22,9 +22,9 @@ export default function RootLayout({
   return (
     <>
     <Provider store={store} >
-    <Header />
+      <Header />
       <main>{ children }</main>
-    <Footer />
+      <Footer />
     </Provider>
     </>
 

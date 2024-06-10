@@ -22,6 +22,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import toast from 'react-hot-toast';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useAuth } from '@/hooks/useAuth';
 
 
 function Copyright(props: any) {
@@ -35,6 +36,11 @@ function Copyright(props: any) {
         {'.'}
       </Typography>
     );
+  }
+
+  interface FormValues  {
+    email : string
+    password : string
   }
   
   // TODO remove, this demo shouldn't need to reset the theme.
@@ -52,30 +58,39 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
       const router = useRouter()
+      
+      const { login } = useAuth()
 
       const {
         register,
         handleSubmit,
+        setError,
         control,
         formState: { errors },
         reset
-      } = useForm({
+      } = useForm<FormValues>({
       resolver: yupResolver(schema)
       });
 
     function onSubmit(data:any) {
       const { email, password } = data;
         console.log(email, password, "login")
-        const response = axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/user/login`,{ email, password }).then(res => {
-        console.log(res.data, "resData")
-        const  access_token: string  = res.data.access_token;
-        localStorage.setItem('access_token', access_token)
-        localStorage.setItem('role', res.data.data.role)
-        localStorage.setItem('user_Id', res.data.data._id)
-        router.push('/home')
-        }).catch(error => {
-            toast.error("Invalid user credentials!")
+        login({ email, password }, () => {
+          setError('email',{
+              type : 'manual',
+              message : 'Invalid email or password!'
+          })
         })
+        // const response = axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/user/login`,{ email, password }).then(res => {
+        // console.log(res.data, "resData")
+        // const  access_token: string  = res.data.access_token;
+        // localStorage.setItem('access_token', access_token)
+        // localStorage.setItem('role', res.data.data.role)
+        // localStorage.setItem('user_Id', res.data.data._id)
+        // router.push('/home')
+        // }).catch(error => {
+        //     toast.error("Invalid user credentials!")
+        // })
     }
 
       const handleClickShowPassword = () => setShowPassword((show) => !show);

@@ -94,9 +94,6 @@ useEffect(() => {
 
 
 
-// useEffect(() => {
-//   console.log(user_Id, role, "Home");
-// },[user_Id, role])
 
   return (
     <>
