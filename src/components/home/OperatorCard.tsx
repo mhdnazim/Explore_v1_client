@@ -45,7 +45,7 @@ const OperatorCard = ({ operators }: Props ) => {
                   {item.name.charAt(0).toUpperCase() + item.name.substring(1,24)}
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  {item.location.charAt(0).toUpperCase() + item.location.substring(1,24)}
+                  {/* {item.location.charAt(0).toUpperCase() + item.location.substring(1,24)} */}
                 </Typography>
                 <Typography variant="body2">
                   <a href={`mailto:${ item.email }`}>{ item.email }</a>
